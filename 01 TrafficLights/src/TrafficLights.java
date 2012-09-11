@@ -1,38 +1,33 @@
 public class TrafficLights {
-    private String[] lights = new String[4];
+    private String[] lights = new String[3];
 
     //принимаем начальное состояние светофора
-    //lights - массив из четырех эл-ов, любые из ряда: жкжзжкжз... наприм. {к,ж,з,ж}
-    //{горел до этого, горит сейчас, загорится следующим, загорится за следующим}
     public void setLights (String[] colours){
+        //lights - массив из трех эл-ов: {горел до этого, горит сейчас, загорится следующим}
         lights[0] = colours[0];
         lights[1] = colours[1];
-        if (lights[1] == "красный"){
-            lights[2] = "желтый";
-            lights[3] = "зеленый";
-        }
-        else if (lights[1] == "зеленый"){
-            lights[2] = "желтый";
-            lights[3] = "красный";
-        }
-        else if (lights[1] == "желтый" && lights[0] == "красный"){
-            lights[2] = "зеленый";
-            lights[3] = "желтый";
-        }
-        else if (lights[1] == "желтый" && lights[0] == "зеленый"){
-            lights[2] = "красный";
-            lights[3] = "желтый";
-        }
+        lights[2] = colours[2];
     }
 
     //"переключаем" цвета
     public void switchLights () {
-        //цвета сдвигаются, наприм. {ж,к,ж,з} --> {к,ж,з,ж}
-        String temp = lights[0];
+        //{*,кжз,*} --> {кжз,*,*} цвет, кот. горит сейчас, станет тем, кот.горел до этого
         lights[0] = lights[1];
-        lights[1] = lights[2];
-        lights[2] = lights[3];
-        lights[3] = temp;
+        //случай {з,ж,к} или {к,ж,з} --> {ж,к,ж} или {ж,з,ж}
+        if (lights[1] == "желтый") {
+            lights[1] = lights[2];
+            lights[2] = "желтый";
+        }
+        //случай {ж,з,ж} --> {з,ж,к}
+        else if (lights[1] == "зеленый") {
+            lights[1] = "желтый"; //lights[0]
+            lights[2] = "красный";
+        }
+        //случай {ж,к,ж} --> {к,ж,з}
+        else if (lights[1] == "красный") {
+            lights[1] = "желтый"; //lights[0]
+            lights[2] = "зеленый";
+        }
     }
 
     public String getStatus (){
